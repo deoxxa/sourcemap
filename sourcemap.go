@@ -51,7 +51,7 @@ func (s *SourceMap) GetSourceMapping(linum, column int) (mapping OriginalMapping
 	linum--
 	column--
 
-	if linum < 0 || linum > len(s.Mappings) {
+	if linum < 0 || linum >= len(s.Mappings) {
 		err = fmt.Errorf("invalid line number: %v", linum+1)
 		return
 	}
@@ -67,7 +67,7 @@ func (s *SourceMap) GetSourceMapping(linum, column int) (mapping OriginalMapping
 		return s.getPreviousLineMapping(linum)
 	}
 
-	index := sort.Search(len(line), func(i int) bool {
+	index := sort.Search(len(line)-1, func(i int) bool {
 		return line[i].GeneratedColumn <= column
 	})
 
